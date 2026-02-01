@@ -1,6 +1,6 @@
 package sistema.domain.enums;
 
-public enum PetGender {
+public enum PetSex {
     MACHO,
     FEMEA
 }

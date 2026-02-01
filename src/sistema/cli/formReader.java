@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class formReader {
-    private static Path cadastroForm = Paths.get("src/sistema/storage/form.txt");
+    private static final Path cadastroForm = Paths.get("src/sistema/storage/form.txt");
 
     public static void showForm() {
         try (BufferedReader reader = Files.newBufferedReader(cadastroForm)) {
