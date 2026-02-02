@@ -32,5 +32,21 @@ public class Menu {
 
     }
 
+    public static void mostraMenuBusca() {
+        System.out.println("\nPrimeiro, escolha o TIPO de animal:");
+        System.out.println("1 - Cachorro");
+        System.out.println("2 - Gato");
+        System.out.println("3 - Passaro");
+    }
+
+    public static void mostraMenuCriterios() {
+        System.out.println("\nAgora, escolha ATÉ 2 critérios de busca:");
+        System.out.println("1 - Nome ou sobrenome");
+        System.out.println("2 - Sexo");
+        System.out.println("3 - Idade");
+        System.out.println("4 - Peso");
+        System.out.println("5 - Raça");
+        System.out.println("6 - Endereço");
+    }
 
 }

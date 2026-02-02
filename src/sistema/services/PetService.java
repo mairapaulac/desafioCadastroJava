@@ -1,5 +1,6 @@
 package sistema.services;
 
+import sistema.cli.Menu;
 import sistema.cli.formReader;
 import sistema.domain.Address;
 import sistema.domain.enums.PetSex;
@@ -130,8 +131,74 @@ public class PetService {
     }
 
 
+    public void alteraPet() {
+        buscaPet();
+        Pet petAlterado = new Pet();
+    }
 
     public void buscaPet() {
+        List<Pet> petsEncontrados = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Agora você vai buscar os pets");
+
+        Menu.mostraMenuBusca();
+        String tipoDoPet = sc.nextLine();
+
+        System.out.println("Quantos criterios de busca você quer utilizar? Máx 2");
+        int qtdCriterios = sc.nextInt();
+        sc.nextLine();
+
+        Menu.mostraMenuCriterios();
+
+        int criterioUm = sc.nextInt();
+
+        if (qtdCriterios == 2) {
+            int criterioDois = sc.nextInt();
+        }
+
+
+        for (Pet pet : petsCadastrados) {
+
+            if(pet.getTipo().name().equalsIgnoreCase(tipoDoPet)) {
+
+                switch (criterioUm) {
+                    //nome ou sobrenome
+                    case 1:
+                        System.out.println();
+                        break;
+                     //sexo
+                    case 2:
+                        System.out.println();
+                        break;
+                     //idade
+                    case 3:
+                        System.out.println();
+                        break;
+                    //peso
+                    case 4:
+                        System.out.println();
+                        break;
+                    //raca
+                    case 5:
+                        System.out.println();
+                        break;
+                    //Endereco
+                    case 6:
+                        System.out.println();
+                        break;
+
+                    default:
+                        System.out.println("opcao invalida bb");
+                }
+
+
+
+
+            }
+
+
+        }
+
 
     }
 
@@ -139,16 +206,11 @@ public class PetService {
 
     }
 
-    public void alteraPet() {
-
-    }
 
     public void deletaPet() {
 
     }
 
-//    public File armazenaArquivo() {
-//        return new File("");
-//    }
+
 
 }
