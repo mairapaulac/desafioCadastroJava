@@ -83,4 +83,15 @@ public class Pet {
     public void setPeso(double peso) {
         this.peso = peso;
     }
+
+    @Override
+    public String toString() {
+        return "1 - " + nome + "\n" +
+                "2 - " + tipo + "\n" +
+                "3 - " + sexo + "\n" +
+                "4 - " + endereco.toString() + "\n" +
+                "5 - " + idade + " anos" + "\n" +
+                "6 - " + peso + "kg" + "\n" +
+                "7 - " + raca;
+    }
 }

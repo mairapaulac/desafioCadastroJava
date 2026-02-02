@@ -9,4 +9,8 @@ public class Address {
         this.rua = rua;
     }
 
+    @Override
+    public String toString() {
+        return rua + ", " + numeroCasa + ", " + cidade;
+    }
 }

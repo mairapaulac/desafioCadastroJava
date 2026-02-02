@@ -4,11 +4,13 @@ import sistema.cli.formReader;
 import sistema.domain.Address;
 import sistema.domain.enums.PetSex;
 import sistema.domain.enums.PetType;
+import sistema.storage.FileStorage;
 import sistema.util.Constantes;
 import sistema.util.exceptions.*;
 import sistema.domain.Pet;
 
 //import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -119,7 +121,12 @@ public class PetService {
         pet.setRaca(raca);
 
         petsCadastrados.add(pet);
-        //salva arquiv
+
+        try {
+            FileStorage.salvaArquivo(pet.toString(), nomeCompleto.replaceAll(" ", ""));
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar arquivo");
+        }
     }
 
 
