@@ -7,6 +7,7 @@ import sistema.domain.enums.PetSex;
 import sistema.domain.enums.PetType;
 import sistema.storage.FileStorage;
 import sistema.util.Constantes;
+import sistema.util.StringNormalizer;
 import sistema.util.exceptions.*;
 import sistema.domain.Pet;
 
@@ -136,70 +137,136 @@ public class PetService {
         Pet petAlterado = new Pet();
     }
 
-    public void buscaPet() {
+    public List<Pet> buscaPet() {
+
         List<Pet> petsEncontrados = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
-        System.out.println("Agora você vai buscar os pets");
 
         Menu.mostraMenuBusca();
-        String tipoDoPet = sc.nextLine();
 
+        String tipoDoPet = sc.nextLine();
         System.out.println("Quantos criterios de busca você quer utilizar? Máx 2");
-        int qtdCriterios = sc.nextInt();
-        sc.nextLine();
+
+        int qtdCriterios = Integer.parseInt(sc.nextLine());
 
         Menu.mostraMenuCriterios();
 
-        int criterioUm = sc.nextInt();
+        int criterioUm = Integer.parseInt(sc.nextLine());
+        System.out.println("Valor para o criterio 1:");
+        String valorUm = sc.nextLine();
+
+        int criterioDois = 0;
+        String valorDois = "";
 
         if (qtdCriterios == 2) {
-            int criterioDois = sc.nextInt();
+            criterioDois = Integer.parseInt(sc.nextLine());
+            System.out.println("Valor para o criterio 2:");
+            valorDois = sc.nextLine();
         }
-
 
         for (Pet pet : petsCadastrados) {
 
-            if(pet.getTipo().name().equalsIgnoreCase(tipoDoPet)) {
+            if (pet.getTipo().name().equalsIgnoreCase(tipoDoPet)) {
+
+                boolean passouUm = false;
+                boolean passouDois = (qtdCriterios == 1);
+
+                StringNormalizer.normaliza(valorUm);
 
                 switch (criterioUm) {
-                    //nome ou sobrenome
                     case 1:
-                        System.out.println();
-                        break;
-                     //sexo
-                    case 2:
-                        System.out.println();
-                        break;
-                     //idade
-                    case 3:
-                        System.out.println();
-                        break;
-                    //peso
-                    case 4:
-                        System.out.println();
-                        break;
-                    //raca
-                    case 5:
-                        System.out.println();
-                        break;
-                    //Endereco
-                    case 6:
-                        System.out.println();
+                        String nomePet = StringNormalizer.normaliza(pet.getNome() + " " + pet.getSobrenome());
+                        if (nomePet.contains(valorUm))
+                            passouUm = true;
                         break;
 
-                    default:
-                        System.out.println("opcao invalida bb");
+                    case 2:
+                        if (pet.getSexo().name().equalsIgnoreCase(valorUm))
+                            passouUm = true;
+                        break;
+
+                    case 3:
+                        if (String.valueOf(pet.getIdade()).equals(valorUm))
+                            passouUm = true;
+                        break;
+
+                    case 4:
+                        if (String.valueOf(pet.getPeso()).equals(valorUm))
+                            passouUm = true;
+                        break;
+
+                    case 5:
+                        String racaPet = StringNormalizer.normaliza(pet.getRaca());
+                        if (racaPet.contains(valorUm))
+                            passouUm = true;
+                        break;
+
+                    case 6:
+                        String e1 = StringNormalizer.normaliza(pet.getEndereco().getRua() + " " + pet.getEndereco().getCidade());
+                        if (e1.contains(valorUm))
+                            passouUm = true;
+                        break;
                 }
 
+                if (qtdCriterios == 2) {
 
+                    StringNormalizer.normaliza(valorDois);
 
+                    switch (criterioDois) {
+                        case 1:
+                            //refactor pro StringNormalizer
+                            String n2 = java.text.Normalizer.normalize(pet.getNome() + " " + pet.getSobrenome(), java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase();
+                            if (n2.contains(valorDois))
+                                passouDois = true;
+                            break;
+                        case 2:
+                            if (pet.getSexo().name().equalsIgnoreCase(valorDois))
+                                passouDois = true;
+                            break;
+                        case 3:
+                            if (String.valueOf(pet.getIdade()).equals(valorDois))
+                                passouDois = true;
+                            break;
+                        case 4:
+                            if (String.valueOf(pet.getPeso()).equals(valorDois))
+                                passouDois = true;
+                            break;
+                        case 5:
+                            //refactor pro StringNormalizer
+                            String r2 = java.text.Normalizer.normalize(pet.getRaca(), java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase();
+                            if (r2.contains(valorDois))
+                                passouDois = true;
+                            break;
+                        case 6:
+                            //refactor pro StringNormalizer
+                            String e2 = java.text.Normalizer.normalize(pet.getEndereco().getRua() + " " + pet.getEndereco().getCidade(), java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase();
+                            if (e2.contains(valorDois))
+                                passouDois = true;
+                            break;
+                    }
+                }
 
+                if (passouUm && passouDois) { //Se passar nos dois criterios eu adiciono o pet à lista dos pets encontrados pra depois poder mostrar
+                    petsEncontrados.add(pet);
+                }
             }
-
-
         }
 
+        if (petsEncontrados.isEmpty()) {
+            System.out.println("Nenhum resultado.");
+        } else {
+            for (int i = 0; i < petsEncontrados.size(); i++) {
+                Pet p = petsEncontrados.get(i);
+                String linha = (i + 1) + ". " + p.getNome() + " " + p.getSobrenome() + " - " + p.getTipo() + " - " + p.getSexo() + " - " + p.getEndereco().getRua() + ", " + p.getEndereco().getNumeroCasa() + " - " + p.getEndereco().getCidade() + " - " + p.getIdade() + " anos - " + p.getPeso() + "kg - " + p.getRaca();
+                String res = linha.replaceAll("(?i)" + valorUm, "**$0**");
+                if (qtdCriterios == 2) {
+                    res = res.replaceAll("(?i)" + valorDois, "**$0**");
+                }
+                System.out.println(res);
+            }
+        }
 
+        return petsEncontrados;
     }
 
     public void buscaPetPorCriterio(String criterio) {
@@ -210,7 +277,6 @@ public class PetService {
     public void deletaPet() {
 
     }
-
 
 
 }
