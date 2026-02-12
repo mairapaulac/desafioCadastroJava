@@ -133,13 +133,75 @@ public class PetService {
 
 
     public void alteraPet() {
-        buscaPet();
-        Pet petAlterado = new Pet();
+        List<Pet> petsEncontrados = buscaPet(); //Obriga o usuario a buscar seguindo os critérios anteriores.
+
+        Pet petEscolhido = null;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Digite o número do pet que você quer alterar: ");
+        int numeroPet = sc.nextInt();
+
+        while (petEscolhido == null) {
+            System.out.println("\nDigite o número do pet da lista acima que você quer alterar: ");
+            try {
+                numeroPet = sc.nextInt();
+
+                if (numeroPet > 0 && numeroPet <= petsEncontrados.size()) {
+                    petEscolhido = petsEncontrados.get(numeroPet - 1);
+                } else {
+                    System.out.println("Número inválido!");
+                    imprimePetsEncontrados(petsEncontrados, 0, "", "");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida! Digite um número.");
+            }
+        }
+
+        Menu.mostraMenuAlteracao();
+        int atributoAlterado = sc.nextInt();
+
+
+        switch (atributoAlterado) {
+            case 1:
+                System.out.println("Digite o novo nome: ");
+                petEscolhido.setNome(sc.nextLine()); // validar se vai mesmo ter um pet escolhido logo acima
+                break;
+
+            case 2:
+                System.out.println("Digite o novo sobrenome: ");
+                petEscolhido.setSobrenome(sc.nextLine());
+                break;
+
+            case 3:
+                System.out.println("Digite a nova idade: ");
+                petEscolhido.setIdade(sc.nextInt());
+                break;
+
+            case 4:
+                System.out.println("Digite o novo peso: ");
+                petEscolhido.setPeso(sc.nextDouble());
+                break;
+
+            case 5:
+                System.out.println("Digite a nova raça: ");
+                petEscolhido.setRaca(sc.nextLine());
+                break;
+
+            case 6:
+                System.out.println("Digite o novo endereço no formato - Numero da casa, rua e cidade: ");
+                String novoNum = sc.nextLine();
+                String novaRua = sc.nextLine();
+                String novaCidade = sc.nextLine();
+                Address novoEnd = new Address(novoNum, novaRua, novaCidade);
+                petEscolhido.setEndereco(novoEnd);
+                break;
+        }
+
     }
 
     public List<Pet> buscaPet() {
 
         List<Pet> petsEncontrados = new ArrayList<>();
+
         Scanner sc = new Scanner(System.in);
 
         Menu.mostraMenuBusca();
@@ -214,44 +276,56 @@ public class PetService {
 
                     switch (criterioDois) {
                         case 1:
-                            //refactor pro StringNormalizer
-                            String n2 = java.text.Normalizer.normalize(pet.getNome() + " " + pet.getSobrenome(), java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase();
-                            if (n2.contains(valorDois))
+                            String nomePet = StringNormalizer.normaliza(pet.getNome() + " " + pet.getSobrenome());
+                            if (nomePet.contains(valorDois))
                                 passouDois = true;
                             break;
+
                         case 2:
                             if (pet.getSexo().name().equalsIgnoreCase(valorDois))
                                 passouDois = true;
                             break;
+
                         case 3:
                             if (String.valueOf(pet.getIdade()).equals(valorDois))
                                 passouDois = true;
                             break;
+
                         case 4:
                             if (String.valueOf(pet.getPeso()).equals(valorDois))
                                 passouDois = true;
                             break;
+
                         case 5:
-                            //refactor pro StringNormalizer
-                            String r2 = java.text.Normalizer.normalize(pet.getRaca(), java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase();
-                            if (r2.contains(valorDois))
+                            String racaPet = StringNormalizer.normaliza(pet.getRaca());
+                            if (racaPet.contains(valorDois))
                                 passouDois = true;
                             break;
+
                         case 6:
-                            //refactor pro StringNormalizer
-                            String e2 = java.text.Normalizer.normalize(pet.getEndereco().getRua() + " " + pet.getEndereco().getCidade(), java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase();
-                            if (e2.contains(valorDois))
+                            String enderecoPet = StringNormalizer.normaliza(pet.getEndereco().getRua() + " " + pet.getEndereco().getCidade());
+                            if (enderecoPet.contains(valorDois))
                                 passouDois = true;
                             break;
                     }
                 }
 
-                if (passouUm && passouDois) { //Se passar nos dois criterios eu adiciono o pet à lista dos pets encontrados pra depois poder mostrar
+                if (passouUm && passouDois) { //Se passar nos dois criterios eu adiciono o pet à lista dos pets encontrados para depois poder mostrar
                     petsEncontrados.add(pet);
                 }
+
             }
         }
+        imprimePetsEncontrados(petsEncontrados, qtdCriterios, valorUm, valorDois);
+        return petsEncontrados;
+    }
 
+
+    public void deletaPet() {
+
+    }
+
+    public void imprimePetsEncontrados(List<Pet> petsEncontrados, int qtdCriterios, String valorUm, String valorDois) {
         if (petsEncontrados.isEmpty()) {
             System.out.println("Nenhum resultado.");
         } else {
@@ -265,17 +339,6 @@ public class PetService {
                 System.out.println(res);
             }
         }
-
-        return petsEncontrados;
-    }
-
-    public void buscaPetPorCriterio(String criterio) {
-
-    }
-
-
-    public void deletaPet() {
-
     }
 
 

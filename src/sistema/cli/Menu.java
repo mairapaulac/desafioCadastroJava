@@ -32,6 +32,7 @@ public class Menu {
 
     }
 
+
     public static void mostraMenuBusca() {
         System.out.println("\nPrimeiro, escolha o TIPO de animal:");
         System.out.println("1 - Cachorro");
@@ -47,6 +48,16 @@ public class Menu {
         System.out.println("4 - Peso");
         System.out.println("5 - Raça");
         System.out.println("6 - Endereço");
+    }
+    public static void mostraMenuAlteracao() {
+        System.out.println("O que você deseja alterar?");
+        System.out.println("1 - Nome");
+        System.out.println("2 - Sobrenome");
+        System.out.println("3 - Idade");
+        System.out.println("4 - Peso");
+        System.out.println("5 - Raça");
+        System.out.println("6 - Endereço");
+        System.out.println("0 - Finalizar Alteração");
     }
 
 }
